@@ -9,24 +9,28 @@ label_encoder = joblib.load('crop_pred_labelencoder.pkl')  # Ensure this is the 
 # Set up the Streamlit app layout
 st.title('Crop Prediction App')
 
-# Create navigation using selectbox (tabs)
-nav = st.sidebar.selectbox("Choose a section", ["Introduction", "Predict Crop"])
-
-# Introduction section
-if nav == "Introduction":
-    st.header("Welcome to the Crop Prediction App!")
-    st.write("""
-        This app helps predict the best crop based on environmental conditions such as temperature, humidity, soil pH, and rainfall. 
-        By entering the relevant values, the app will predict the crop that is most suitable for the given conditions.
-    """)
-    st.write("""
-        ## How to use:
-        - Enter values for Temperature, Humidity, pH, and Rainfall.
-        - Click on the **Predict** button to get the recommended crop.
-    """)
+# Create two buttons for navigation
+if st.button('Introduction'):
+    # Introduction section
+    col1, col2 = st.columns([1, 5])  # Create two columns: 1 for the image, 5 for the text
     
-# Prediction section
-elif nav == "Predict Crop":
+    with col1:
+        st.image('https://example.com/your_image.jpg', width=100)  # Replace with your image URL or file path
+    
+    with col2:
+        st.header("Welcome to the Crop Prediction App!")
+        st.write("""
+            This app helps predict the best crop based on environmental conditions such as temperature, humidity, soil pH, and rainfall. 
+            By entering the relevant values, the app will predict the crop that is most suitable for the given conditions.
+        """)
+        st.write("""
+            ## How to use:
+            - Enter values for Temperature, Humidity, pH, and Rainfall.
+            - Click on the **Predict** button to get the recommended crop.
+        """)
+
+elif st.button('Predict Crop'):
+    # Prediction section
     st.header("Crop Prediction")
 
     # Create input fields for the user
