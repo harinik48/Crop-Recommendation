@@ -1,4 +1,7 @@
 streamlit
-joblib
+Flask
 scikit-learn
+numpy
 pandas
+requests
+joblib
