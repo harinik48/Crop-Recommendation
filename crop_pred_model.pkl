@@ -1,8 +1,0 @@
-import joblib
-import pickle
-
-# Load the existing model
-model = joblib.load('crop_pred_model.pkl')
-
-# Re-save it
-joblib.dump(model, 'new_crop_pred_model.pkl')
