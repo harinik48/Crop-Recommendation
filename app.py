@@ -14,22 +14,16 @@ nav = st.sidebar.selectbox("Choose a section", ["Introduction", "Predict Crop"])
 
 # Introduction section
 if nav == "Introduction":
-    col1, col2 = st.columns([1, 5])  # Create two columns: 1 for the image, 5 for the text
-    
-    with col1:
-        st.image('https://example.com/your_image.jpg', width=100)  # Replace with your image URL or file path
-    
-    with col2:
-        st.header("Welcome to the Crop Prediction App!")
-        st.write("""
-            This app helps predict the best crop based on environmental conditions such as temperature, humidity, soil pH, and rainfall. 
-            By entering the relevant values, the app will predict the crop that is most suitable for the given conditions.
-        """)
-        st.write("""
-            ## How to use:
-            - Enter values for Temperature, Humidity, pH, and Rainfall.
-            - Click on the **Predict** button to get the recommended crop.
-        """)
+    st.header("Welcome to the Crop Prediction App!")
+    st.write("""
+        This app helps predict the best crop based on environmental conditions such as temperature, humidity, soil pH, and rainfall. 
+        By entering the relevant values, the app will predict the crop that is most suitable for the given conditions.
+    """)
+    st.write("""
+        ## How to use:
+        - Enter values for Temperature, Humidity, pH, and Rainfall.
+        - Click on the **Predict** button to get the recommended crop.
+    """)
     
 # Prediction section
 elif nav == "Predict Crop":
