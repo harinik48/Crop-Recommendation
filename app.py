@@ -9,21 +9,24 @@ label_encoder = joblib.load('crop_pred_labelencoder.pkl')  # Ensure this is the 
 # Set up the Streamlit app layout
 st.title('Crop Prediction App')
 
-# By default, show the Introduction section
-st.header("Welcome to the Crop Prediction App!")
-st.write("""
-    This app helps predict the best crop based on environmental conditions such as temperature, humidity, soil pH, and rainfall. 
-    By entering the relevant values, the app will predict the crop that is most suitable for the given conditions.
-""")
-st.write("""
-    ## How to use:
-    - Enter values for Temperature, Humidity, pH, and Rainfall.
-    - Click on the **Predict** button to get the recommended crop.
-""")
+# Create a radio button for navigation (tabs on the left)
+option = st.radio("Choose a section", ["Introduction", "Predict Crop"])
 
-# Create a button for navigation to the Prediction section
-if st.button('Predict Crop'):
-    # Prediction section
+# Introduction Section
+if option == "Introduction":
+    st.header("Welcome to the Crop Prediction App!")
+    st.write("""
+        This app helps predict the best crop based on environmental conditions such as temperature, humidity, soil pH, and rainfall. 
+        By entering the relevant values, the app will predict the crop that is most suitable for the given conditions.
+    """)
+    st.write("""
+        ## How to use:
+        - Enter values for Temperature, Humidity, pH, and Rainfall.
+        - Click on the **Predict** button to get the recommended crop.
+    """)
+
+# Prediction Section
+if option == "Predict Crop":
     st.header("Crop Prediction")
 
     # Create input fields for the user
@@ -50,3 +53,4 @@ if st.button('Predict Crop'):
 
         # Show the prediction to the user
         st.write(f"The predicted crop is: {crop_name[0]}")  # Display the crop name
+
