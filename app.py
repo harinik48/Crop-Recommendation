@@ -7,7 +7,7 @@ model = joblib.load('crop_pred_model.pkl')  # Ensure correct file path
 label_encoder = joblib.load('crop_pred_labelencoder.pkl')  # Ensure this is the correct file for label encoding
 
 # Set up the Streamlit app layout
-st.title('Crop Prediction App')
+st.title('🌱 Crop Prediction App')
 
 # Create a radio button for navigation (tabs on the left)
 option = st.radio("Choose a section", ["Introduction", "Predict Crop"])
