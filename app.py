@@ -2,8 +2,9 @@ import streamlit as st
 import joblib
 import pandas as pd
 
-# Load the trained model
-model = joblib.load('crop_pred_model.pkl')  # Replace this path with the location of your model
+# Load the trained model and LabelEncoder
+model = joblib.load('crop_pred_model.pkl')  # Ensure correct file path
+label_encoder = joblib.load('crop_pred_labelencoder.pkl')  # Ensure this is the correct file for label encoding
 
 # Set up the Streamlit app layout
 st.title('Crop Prediction App')
@@ -27,5 +28,8 @@ if st.button('Predict'):
     # Make predictions using the trained model
     prediction = model.predict(input_data)
 
+    # Use the label encoder to convert the predicted label back to the crop name
+    crop_name = label_encoder.inverse_transform(prediction)
+
     # Show the prediction to the user
-    st.write(f"The predicted crop is: {prediction[0]}")  # Adjust this based on the output format of your model
+    st.write(f"The predicted crop is: {crop_name[0]}")  # Display the crop name
