@@ -1,67 +1,31 @@
-from flask import Flask, render_template, request
-import requests
-import numpy as np
-from sklearn.model_selection import train_test_split
-# from sklearn.ensemble import RandomForestClassifier
-# from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score
-# import json
-import pandas as pd
+import streamlit as st
 import joblib
+import pandas as pd
 
-app = Flask(__name__)
-app.url_map.strict_slashes = False
+# Load the trained model
+model = joblib.load('crop_pred_model.pkl')  # Replace this path with the location of your model
 
-# API data
-channel_id = '562742'
-read_key = 'B7KXZ1OS1873O8ET'
-num_entries = 1
+# Set up the Streamlit app layout
+st.title('Crop Prediction App')
 
-# Loading model and labelencoder
-model = joblib.load('crop_pred_model.pkl')
-le = joblib.load('crop_pred_labelencoder.pkl')
+# Create input fields for the user
+temperature = st.number_input("Enter Temperature (°C)", min_value=-50, max_value=50)
+humidity = st.number_input("Enter Humidity (%)", min_value=0, max_value=100)
+ph = st.number_input("Enter pH value of soil", min_value=0.0, max_value=14.0)
+rainfall = st.number_input("Enter Rainfall (mm)", min_value=0, max_value=500)
 
-# Function to retrieve data from API
-def get_data_from_thingspeak(channel_id, read_key, num_entries):
-    url = f'https://api.thingspeak.com/channels/{channel_id}/feeds.json?api_key={read_key}&results={num_entries}'
-    response = requests.get(url)
+# When the "Predict" button is pressed
+if st.button('Predict'):
+    # Prepare the input data as a DataFrame
+    input_data = pd.DataFrame({
+        'temperature': [temperature],
+        'humidity': [humidity],
+        'ph': [ph],
+        'rainfall': [rainfall]
+    })
     
-    if response.status_code == 200:
-        data = response.json()
-        # Extracting relevant data from the response
-        entries = data['feeds']
-        field1_data = [entry['field1'] for entry in entries]
-        field2_data = [entry['field2'] for entry in entries]
-        field3_data = [entry['field3'] for entry in entries]
-        field4_data = [entry['field4'] for entry in entries]
-        return field1_data, field2_data, field3_data, field4_data
-    else:
-        print(f"Failed to retrieve data. Status code: {response.status_code}")
-        return None
+    # Make predictions using the trained model
+    prediction = model.predict(input_data)
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-# Predict function
-@app.route('/predict', methods=['POST'])
-def predict():
-    if request.method == 'POST':
-        target_values = []
-        target_values.append(get_data_from_thingspeak(channel_id, read_key, num_entries))
-        print(target_values)
-        data = {
-            'temperature': target_values[0][1],
-            'humidity': target_values[0][2],
-            'ph': target_values[0][0],
-            'rainfall': target_values[0][3]
-        }
-        test_data = pd.DataFrame(data)
-        print(test_data)
-        result = model.predict(test_data)
-        result = le.inverse_transform(result)
-        print(result[0])
-        return render_template('index.html', result=result[0], ph = data['ph'][0], temp = data['temperature'][0], hum = data['humidity'][0], rain = data['rainfall'][0])
-
-if __name__ == "__main__":
-    app.run(debug=True)
+    # Show the prediction to the user
+    st.write(f"The predicted crop is: {prediction[0]}")  # Adjust this based on the output format of your model
